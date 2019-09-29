@@ -36,3 +36,14 @@
        for tail = (cdr sequence) then (cdr tail)
        for head = nil then (append head (list (pop sequence)))
        collect (* (prod head) (prod tail)))))
+
+(defun rotate (list)
+  (prog1 (nconc (cdr list) list)
+    (setf (cdr list) nil)))
+
+(defun excluded-product-with-rotation (list)
+  (loop with l = list
+     collect (reduce #'* (cdr l) :initial-value 1)
+     do
+       (setf l (rotate l))
+       (when (eq l list) (loop-finish))))
